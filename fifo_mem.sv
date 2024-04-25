@@ -13,7 +13,7 @@ output [DATASIZE-1:0] rdata;
 
 localparam DEPTH = 1<<ADDRSIZE;  
 
-reg [DATASIZE-1:0] mem [0:DEPTH-1];
+	reg [DATASIZE-1:0] mem [0:443];
 
 assign rdata = mem[raddr];
 
