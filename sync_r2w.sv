@@ -4,7 +4,7 @@ module sync_r2w(wq2_rptr,
 		rptr,
 		wclk, wrst_n);
 
-parameter ADDRSIZE=444;
+parameter ADDRSIZE=8;
 
 input [ADDRSIZE:0] rptr;
 input wclk, wrst_n;
