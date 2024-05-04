@@ -1,24 +1,27 @@
-//*****************FIFO_Memory_Module*************************//
+//
+// FIFO memory
+//
+module fifomem
+#(
+  parameter DATASIZE = 8, // Memory data word width
+  parameter ADDRSIZE = 9  // Number of mem address bits
+)
+(
+  input  logic winc, wfull, wclk,
+  input  logic [ADDRSIZE-1:0] waddr, raddr,
+  input  logic [DATASIZE-1:0] wdata,
+  output logic [DATASIZE-1:0] rdata
+);
 
-module fifomem(rdata, wdata, waddr, raddr, wclken, wfull, wclk);
+  // RTL Verilog memory model
+  localparam DEPTH = 360;//1<<ADDRSIZE;
 
-parameter DATASIZE=8;
+  logic [DATASIZE-1:0] mem [0:DEPTH-1];
 
-parameter ADDRSIZE=444;
+  assign rdata = mem[raddr];
 
-input [DATASIZE-1:0] wdata;
-input [ADDRSIZE-1:0] waddr, raddr;
-input wclken, wfull, wclk;
-output [DATASIZE-1:0] rdata;
+  always_ff @(posedge wclk)
+    if (winc && !wfull)
+      mem[waddr] <= wdata;
 
-localparam DEPTH = 1<<ADDRSIZE;  
-
-	reg [DATASIZE-1:0] mem [0:443];
-
-assign rdata = mem[raddr];
-
-always @(posedge wclk) begin
-	if(wclken && !wfull) mem[waddr]<=wdata;
-end
-
-endmodule 
+endmodule
