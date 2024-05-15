@@ -1,22 +1,20 @@
-/****************** FIFO Read Module******************/
+//
+// Read pointer to write clock synchronizer
+//
+module sync_r2w
+#(
+  parameter ADDRSIZE = 9
+)
+(
+  input  logic wclk, wrst_n,
+  input  logic [ADDRSIZE:0] rptr,
+  output logic [ADDRSIZE:0] wq2_rptr
+);
 
-module sync_r2w(wq2_rptr,
-		rptr,
-		wclk, wrst_n);
+  logic [ADDRSIZE:0] wq1_rptr;
 
-parameter ADDRSIZE=8;
-
-input [ADDRSIZE:0] rptr;
-input wclk, wrst_n;
-output reg [ADDRSIZE:0] wq2_rptr;
-
-reg [ADDRSIZE:0] wq1_rptr;
-
-always @(posedge wclk or negedge wrst_n) begin
-	if(!wrst_n) {wq2_rptr,wq1_rptr} <=0;
-	else {wq2_rptr,wq1_rptr} <= {wq1_rptr,rptr};
-
-end
+  always_ff @(posedge wclk or negedge wrst_n)
+    if (!wrst_n) {wq2_rptr,wq1_rptr} <= 0;
+    else {wq2_rptr,wq1_rptr} <= {wq1_rptr,rptr};
 
 endmodule
-
